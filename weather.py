@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import os
 
-API_KEY =os.getenv("6bf1ddc0bdceba120034f06f6cd74454")  # OpenWeatherMap key
+st.write("DEBUG API KEY:", os.getenv("OPENWEATHER_API_KEY"))  # OpenWeatherMap key
 
 st.set_page_config(page_title="Weather App", page_icon="🌦️")
 
