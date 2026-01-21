@@ -2,28 +2,23 @@ import streamlit as st
 import requests
 import os
 
-st.write("DEBUG API KEY:", os.getenv("OPENWEATHER_API_KEY"))  # OpenWeatherMap key
+st.set_page_config(page_title="Weather App", page_icon="🌤️")
 
-st.set_page_config(page_title="Weather App", page_icon="🌦️")
+API_KEY = os.getenv("OPENWEATHER_API_KEY")
 
 st.title("🌦️ Weather App")
-
 city = st.text_input("Enter city name")
 
 if st.button("Get Weather"):
-    if city.strip() == "":
-        st.warning("Please enter a city name")
-    else:
-        url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
-            data = response.json()
+    url = "https://api.openweathermap.org/data/2.5/weather"
+    params = {
+        "q": city.strip(),
+        "appid": API_KEY,
+        "units": "metric"
+    }
 
-            st.success(f"Weather in {data['name']}, {data['sys']['country']}")
-            st.write(f"🌡️ Temperature: {data['main']['temp']} °C")
-            st.write(f"☁️ Condition: {data['weather'][0]['description'].title()}")
-            st.write(f"💧 Humidity: {data['main']['humidity']}%")
+    response = requests.get(url, params=params)
 
-        except:
-            st.error("City not found or API error")
+    st.write("STATUS CODE:", response.status_code)
+    st.write("RAW RESPONSE:")
+    st.json(response.json())
